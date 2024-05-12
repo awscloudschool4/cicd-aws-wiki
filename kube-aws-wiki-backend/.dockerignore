@@ -1,0 +1,4 @@
+myvenv/
+Dockerfile
+.dockerignore
+k8s-ohhong-85c916f15ad6.json
