@@ -13,55 +13,48 @@ function PostForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
+    formData.append("title", title);
+    formData.append("writer", writer);
+    formData.append("content", content);
+    formData.append("tag", "1");
+
     if (file) {
-      formData.append("images", file);
+      formData.append("image", file);
     }
 
     let endpoint;
-    let reqKey = "";
     switch (category) {
       case "screenShare":
-        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/photo/api`;
+        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/photo/api/`;
         break;
       case "certification":
-        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/job/api`;
-        reqKey = "JobReqInfo";
+        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/job/api/`;
         break;
       case "notesShare":
-        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/note/api`;
-        reqKey = "NoteReqInfo";
+        endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/note/api/`;
         break;
       default:
         console.error("Invalid category");
         return;
     }
 
-    if (reqKey) {
-      const infoData = JSON.stringify({
-        title: title,
-        writer: writer,
-        content: content,
-      });
-      formData.append(
-        reqKey,
-        new Blob([infoData], { type: "application/json" })
-      );
-    }
-
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        body: formData,
+        body: formData, // send formData directly
+        // Do not set content-type header for FormData; let the browser handle it
       });
       if (!response.ok) {
-        throw new Error("Server responded with a bad request");
+        throw new Error(
+          `Server responded with a bad request: ${response.statusText}`
+        );
       }
       const data = await response.json();
       console.log("Success:", data);
       setIsSuccess(true);
       setAlert("업로드 성공!");
+      // Redirect based on category
       switch (category) {
         case "screenShare":
           router.push("/class");
@@ -79,7 +72,6 @@ function PostForm() {
       console.error("Error:", error);
       setIsSuccess(false);
       setAlert(`업로드 실패: ${error.message}`);
-      console.log(endpoint);
     }
   };
 
