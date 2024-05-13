@@ -1,7 +1,12 @@
 #!/bin/sh
 
+python manage.py makemigrations job
+python manage.py makemigrations note
+python manage.py makemigrations photo
+
 python manage.py makemigrations
-python trymigrate.py
+
+python manage.py migrate
 
 python init_job_db.py
 python init_note_db.py

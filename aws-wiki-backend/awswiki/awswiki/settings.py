@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from google.oauth2 import service_account
-import my_settings
+# from google.oauth2 import service_account
+# import my_settings
 import json
 import base64
 import os
@@ -24,24 +24,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = my_settings.SECRET_KEY
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = my_settings.SECRET_KEY
+SECRET_KEY = 'django-insecure-k1_u6012qar0m!0!c=ibszh7*(rx897%6f59wl9&8guvr%mszr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# GS_BUCKET_NAME = 'awswiki_image_data' 
+# GS_PROJECT_ID = 'k8s-ohhong'
 
-GS_BUCKET_NAME = 'awswiki_image_data' 
-GS_PROJECT_ID = 'k8s-ohhong'
+# json_str = os.environ.get('GCLOUD_CREDENTIALS_JSON')
 
-json_str = os.environ.get('GCLOUD_CREDENTIALS_JSON')
+# credentials_info = json.loads(json_str)
 
-credentials_info = json.loads(json_str)
-
-GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_info)
+# GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_info)
 
 # GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
 #     "path\k8s-ohhong-85c916f15ad6.json"
@@ -56,10 +55,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'corsheaders',
-
     'job',
     'note',
     'photo'
@@ -107,7 +104,17 @@ WSGI_APPLICATION = 'awswiki.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = my_settings.DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'awswiki_db',
+        'USER': 'root',
+        'PASSWORD': 'pass123#',
+        'HOST': '192.168.56.100',
+        'PORT': '3306',
+    }
+}
+
 
 CORS_ALLOWED_ORIGINS_ALL = True
 
