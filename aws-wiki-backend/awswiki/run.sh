@@ -1,5 +1,7 @@
 #!/bin/sh
 
+python init_checktable.py
+
 python manage.py makemigrations
 python trymigrate.py
 
