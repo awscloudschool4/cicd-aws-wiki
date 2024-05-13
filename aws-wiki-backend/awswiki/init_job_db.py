@@ -6,10 +6,10 @@ from datetime import datetime
 import json
 
 mydb = mysql.connector.connect(
-    host=os.environ.get('MYSQL_HOST', 'mysql-svc'),
-    user=os.environ.get('MYSQL_USER', 'root'),
-    password=os.environ.get('MYSQL_PASSWORD', 'pass123#'),
-    database=os.environ.get('MYSQL_DB', 'awswiki_db')
+    host='192.168.56.100',
+    user='root',
+    password='pass123#',
+    database='awswiki_db'
 )
 
 mycursor = mydb.cursor()
