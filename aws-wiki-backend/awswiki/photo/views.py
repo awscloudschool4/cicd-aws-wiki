@@ -28,5 +28,5 @@ class PhotoDateAPI(APIView):
         photos = Photo.objects.filter(date__date=date)
         if not photos.exists():
             return Response({"message": "No photos found for this date"}, status=404)
-        serializer = PhotoSerializer(photos, many=True)
+        serializer = PhotoSerializer(photos, many=True, context={'request': request})
         return Response(serializer.data)
