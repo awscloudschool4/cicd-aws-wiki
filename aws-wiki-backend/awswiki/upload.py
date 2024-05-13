@@ -11,3 +11,12 @@ def upload_image(file, directory):
     #     return storage.url(path)
     # except Exception as e:
     #     print(e)
+    try:
+        target_path = f"/{directory}/{datetime.timestamp(datetime.now())}.jpg"
+        with open(target_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        return target_path
+    except Exception as e:
+        print(e)
+        return None
