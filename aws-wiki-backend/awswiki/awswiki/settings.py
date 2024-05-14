@@ -104,14 +104,25 @@ WSGI_APPLICATION = 'awswiki.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'awswiki_db',
+#         'USER': 'root',
+#         'PASSWORD': 'pass123#',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'awswiki_db',
-        'USER': 'root',
-        'PASSWORD': 'pass123#',
-        'HOST': '192.168.56.100',
-        'PORT': '3306',
+        'NAME': os.environ.get('MYSQL_DB', 'awswiki_db'),
+        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'pass123#'),
+        'HOST': os.environ.get('MYSQL_HOST', 'mysql-svc'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
     }
 }
 
