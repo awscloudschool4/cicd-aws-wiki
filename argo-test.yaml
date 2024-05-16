@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: manji955/testback:7.0  #kimyoungwoo613/back:2.0
+        image: kimyoungwoo613/back:2.0 manji955/testback:7.0
         ports:
         - containerPort: 8000
         env:
