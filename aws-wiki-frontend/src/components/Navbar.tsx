@@ -9,12 +9,12 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-  Input,
 } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import { IoMdSearch } from "react-icons/io";
+
+import Searchbar from "./Searchbar";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +46,7 @@ const Navigation = () => {
               <Link
                 href={item.href}
                 color={pathname == item.href ? "primary" : "foreground"}
+                className="hover:text-purple-600"
                 key={index}
               >
                 <p className="font-semibold">{item.menu}</p>
@@ -54,19 +55,7 @@ const Navigation = () => {
           ))}
         </NavbarContent>
         <NavbarContent as="div" className="items-center" justify="end">
-          <Input
-            classNames={{
-              base: "max-w-full sm:max-w-[10rem] h-10",
-              mainWrapper: "h-full",
-              input: "text-small",
-              inputWrapper:
-                "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-            }}
-            placeholder="필기 검색"
-            size="sm"
-            startContent={<IoMdSearch size={18} />}
-            type="search"
-          />
+          <Searchbar />
         </NavbarContent>
         <NavbarMenu>
           {menuItems.map((item, index) => (
