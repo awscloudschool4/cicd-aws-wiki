@@ -46,7 +46,7 @@ class JobAPI(viewsets.ModelViewSet):
 
         search_results = list(job_results) + list(note_results) + list(photo_results)
 
-        serializer = searchSerializer(search_results, many=True)
+        serializer = searchSerializer(search_results, many=True, context={'request': request})
 
         return Response(serializer.data)
 
