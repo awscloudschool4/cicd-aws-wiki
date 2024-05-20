@@ -16,7 +16,7 @@ const page = () => {
         shadow="sm"
       >
         <div className="flex flex-row justify-between items-center">
-          <Title text="화면 공유" />
+          <Title text="사진 공유" />
           <div>
             <Input
               type="date"
