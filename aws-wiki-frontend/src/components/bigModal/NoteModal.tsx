@@ -8,9 +8,10 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  Image,
   Divider,
 } from "@nextui-org/react";
+
+import ImageComponent from "../ServerImage";
 
 interface INote {
   index: number;
@@ -37,7 +38,7 @@ const NoteModal = ({ isOpen, onOpenChange, data, onOpen }: IOpen) => {
         <ModalHeader>{data.title}</ModalHeader>
         <ModalBody className="flex flex-col  gap-3">
           <div className="flex items-center justify-center">
-            <Image src={data.image} width={500} alt="사진" />
+            <ImageComponent src={data.image} width={500} alt="사진" />
           </div>
           <p>{data.content}</p>
           <Divider />

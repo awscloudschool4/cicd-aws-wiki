@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { getPhotoDateList } from "../action";
 import useSWR from "swr";
-import { Card, Image, useDisclosure } from "@nextui-org/react";
+import { Card, useDisclosure } from "@nextui-org/react";
 import { FormatDate } from "@/utils/FormatDate";
 import { IPhoto } from "@/utils/DataType";
 import PhotoModal from "../bigModal/PhotoModal";
+import ImageComponent from "../ServerImage";
 
 interface IPhotoDate {
   searchDate: string;
@@ -41,7 +42,12 @@ const PhotoDateFullSection = ({ searchDate }: IPhotoDate) => {
             <div className="font-bold text-lg mb-2">
               {FormatDate(photo.date)}
             </div>
-            <Image src={photo.image} width={500} height={250} alt="사진" />
+            <ImageComponent
+              src={photo.image}
+              width={500}
+              height={250}
+              alt="사진"
+            />
           </Card>
         ))}
       </div>

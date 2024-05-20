@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { getPhotoList } from "../action";
 import useSWR from "swr";
-import { Card, Image, useDisclosure } from "@nextui-org/react";
+import { Card, useDisclosure } from "@nextui-org/react";
 import PhotoModal from "../bigModal/PhotoModal";
 import { IPhoto } from "@/utils/DataType";
 import { FormatDate } from "@/utils/FormatDate";
+import ImageComponent from "../ServerImage";
 
 const PhotoCardSection: React.FC = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<IPhoto | null>(null);
@@ -38,7 +39,12 @@ const PhotoCardSection: React.FC = () => {
             <div className="font-bold text-lg mb-2">
               {FormatDate(photo.date)}
             </div>
-            <Image src={photo.image} width={500} height={250} alt="사진" />
+            <ImageComponent
+              src={photo.image}
+              width={500}
+              height={250}
+              alt="사진"
+            />
           </Card>
         ))}
       </div>

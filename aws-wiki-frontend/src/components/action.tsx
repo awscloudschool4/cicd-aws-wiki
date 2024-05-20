@@ -96,3 +96,17 @@ export async function getSearchResult(searchTerm: string) {
     return [];
   }
 }
+
+export async function getImage(url: string) {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    // throw new Error("Failed to fetch image");
+    return "no image";
+  }
+  const buffer = await res.arrayBuffer();
+  const base64 = Buffer.from(buffer).toString("base64");
+  const mimeType = res.headers.get("content-type") || "image/jpeg";
+  //console.log(`data:${mimeType};base64,${base64}`);
+  return `data:${mimeType};base64,${base64}`;
+}

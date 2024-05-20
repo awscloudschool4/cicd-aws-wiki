@@ -14,6 +14,8 @@ import {
 import { FormatDate } from "@/utils/FormatDate";
 import { IPhoto } from "@/utils/DataType";
 
+import ImageComponent from "../ServerImage";
+
 interface IOpen {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
@@ -27,7 +29,7 @@ const PhotoModal = ({ isOpen, onOpenChange, data, onOpen }: IOpen) => {
       <ModalContent>
         <ModalHeader>{FormatDate(data.date)}</ModalHeader>
         <ModalBody className="flex items-center justify-center">
-          <Image src={data.image} width={500} alt="사진" />
+          <ImageComponent src={data.image} width={500} alt="사진" />
         </ModalBody>
         <ModalFooter>
           <div className="flex justify-end mt-4">

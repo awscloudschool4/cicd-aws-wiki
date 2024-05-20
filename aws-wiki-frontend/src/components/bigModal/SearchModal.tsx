@@ -7,11 +7,11 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  Image,
   Divider,
 } from "@nextui-org/react";
 
 import { FormatDate } from "@/utils/FormatDate";
+import ImageComponent from "../ServerImage";
 
 interface SearchResult {
   index: number;
@@ -39,7 +39,7 @@ const SearchModal = ({ isOpen, onOpenChange, data, onOpen }: IOpen) => {
         <ModalHeader>{data.title}</ModalHeader>
         <ModalBody className="flex flex-col  gap-3">
           <div className="flex items-center justify-center">
-            <Image src={data.image} width={500} alt="사진" />
+            <ImageComponent src={data.image} width={500} alt="사진" />
           </div>
           <p>{data.content}</p>
           <Divider />

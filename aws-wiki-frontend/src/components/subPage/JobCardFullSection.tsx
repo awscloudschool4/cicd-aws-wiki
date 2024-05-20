@@ -7,12 +7,12 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-  Image,
   useDisclosure,
 } from "@nextui-org/react";
 import { FormatDate } from "@/utils/FormatDate";
 import { IJob } from "@/utils/DataType";
 import JobModal from "../bigModal/JobModal";
+import ImageComponent from "../ServerImage";
 
 const JobCardFullSection = () => {
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
@@ -42,7 +42,12 @@ const JobCardFullSection = () => {
               <p className=" font-bold">{job.title}</p>
             </CardHeader>
             <CardBody>
-              <Image src={job.image} width={500} height={250} alt="사진" />
+              <ImageComponent
+                src={job.image}
+                width={500}
+                height={250}
+                alt="사진"
+              />
             </CardBody>
             <Divider />
             <CardFooter className="flex flex-col gap-2">
