@@ -29,8 +29,7 @@ jobs:
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') }}
         id: frontend-version
         run: |
-          IMAGE_NAME=codingalice/aws-wiki-frontend
-          CURRENT_VERSION=$(docker manifest inspect $IMAGE_NAME:latest --verbose | grep -oP 'v\d+\.\d+' | tail -1 | grep -oP '\d+\.\d+')
+          CURRENT_VERSION=$(grep -oP 'codingalice/aws-wiki-front:\K[0-9]+\.[0-9]+' manifest/front/frontend.yaml)
           if [ -z "$CURRENT_VERSION" ]; then
             CURRENT_VERSION=3.0
           fi
@@ -40,20 +39,19 @@ jobs:
       - name: Build and Push Frontend Image
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') }}
         run: |
-          docker build -t codingalice/aws-wiki-frontend:${{ env.NEW_VERSION }} aws-wiki-frontend
-          docker push codingalice/aws-wiki-frontend:${{ env.NEW_VERSION }}
+          docker build -t codingalice/aws-wiki-front:${{ env.NEW_VERSION }} aws-wiki-frontend
+          docker push codingalice/aws-wiki-front:${{ env.NEW_VERSION }}
 
       - name: Update frontend.yaml
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') }}
         run: |
-          sed -i 's|image: codingalice/aws-wiki-frontend:.*|image: codingalice/aws-wiki-frontend:${{ env.NEW_VERSION }}|' manifest/front/frontend.yaml
+          sed -i 's|image: codingalice/aws-wiki-front:.*|image: codingalice/aws-wiki-front:${{ env.NEW_VERSION }}|' manifest/front/frontend.yaml
 
       - name: Determine backend image version
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/') }}
         id: backend-version
         run: |
-          IMAGE_NAME=codingalice/aws-wiki-backend
-          CURRENT_VERSION=$(docker manifest inspect $IMAGE_NAME:latest --verbose | grep -oP 'v\d+\.\d+' | tail -1 | grep -oP '\d+\.\d+')
+          CURRENT_VERSION=$(grep -oP 'codingalice/aws-wiki-back:\K[0-9]+\.[0-9]+' manifest/back/backend.yaml)
           if [ -z "$CURRENT_VERSION" ]; then
             CURRENT_VERSION=2.0
           fi
@@ -63,13 +61,13 @@ jobs:
       - name: Build and Push Backend Image
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/') }}
         run: |
-          docker build -t codingalice/aws-wiki-backend:${{ env.NEW_VERSION }} aws-wiki-backend
-          docker push codingalice/aws-wiki-backend:${{ env.NEW_VERSION }}
+          docker build -t codingalice/aws-wiki-back:${{ env.NEW_VERSION }} aws-wiki-backend
+          docker push codingalice/aws-wiki-back:${{ env.NEW_VERSION }}
 
       - name: Update backend.yaml
         if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/') }}
         run: |
-          sed -i 's|image: codingalice/aws-wiki-backend:.*|image: codingalice/aws-wiki-backend:${{ env.NEW_VERSION }}|' manifest/back/backend.yaml
+          sed -i 's|image: codingalice/aws-wiki-back:.*|image: codingalice/aws-wiki-back:${{ env.NEW_VERSION }}|' manifest/back/backend.yaml
 
       - name: Commit and push changes
         if: |
