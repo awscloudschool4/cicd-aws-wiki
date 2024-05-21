@@ -1,0 +1,100 @@
+name: Update Manifest
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'aws-wiki-frontend/**'
+      - 'aws-wiki-backend/**'
+
+jobs:
+  build-and-update-frontend:
+    if: contains(github.event.head_commit.modified, 'aws-wiki-frontend/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Get current frontend version
+        id: get-version
+        run: |
+          version=$(docker images codingalice/aws-wiki-frontend --format "{{.Tag}}" | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+          echo "Current version: $version"
+          IFS='.' read -r major minor <<< "$version"
+          new_minor=$((minor + 1))
+          new_version="$major.$new_minor"
+          echo "New version: $new_version"
+          echo "::set-output name=new_version::$new_version"
+
+      - name: Build and push Docker image
+        run: |
+          cd aws-wiki-frontend
+          docker build -t codingalice/aws-wiki-frontend:${{ steps.get-version.outputs.new_version }} .
+          docker push codingalice/aws-wiki-frontend:${{ steps.get-version.outputs.new_version }}
+
+      - name: Update frontend manifest
+        run: |
+          sed -i 's|image: codingalice/aws-wiki-frontend:.*|image: codingalice/aws-wiki-frontend:${{ steps.get-version.outputs.new_version }}|' manifest/front/frontend.yaml
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add manifest/front/frontend.yaml
+          git commit -m 'Update frontend image in manifest to version ${{ steps.get-version.outputs.new_version }}'
+          git push origin develop
+
+  build-and-update-backend:
+    if: contains(github.event.head_commit.modified, 'aws-wiki-backend/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Get current backend version
+        id: get-version
+        run: |
+          version=$(docker images codingalice/aws-wiki-backend --format "{{.Tag}}" | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+          echo "Current version: $version"
+          IFS='.' read -r major minor <<< "$version"
+          new_minor=$((minor + 1))
+          new_version="$major.$new_minor"
+          echo "New version: $new_version"
+          echo "::set-output name=new_version::$new_version"
+
+      - name: Build and push Docker image
+        run: |
+          cd aws-wiki-backend
+          docker build -t codingalice/aws-wiki-backend:${{ steps.get-version.outputs.new_version }} .
+          docker push codingalice/aws-wiki-backend:${{ steps.get-version.outputs.new_version }}
+
+      - name: Update backend manifest
+        run: |
+          sed -i 's|image: codingalice/aws-wiki-backend:.*|image: codingalice/aws-wiki-backend:${{ steps.get-version.outputs.new_version }}|' manifest/back/backend.yaml
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add manifest/back/backend.yaml
+          git commit -m 'Update backend image in manifest to version ${{ steps.get-version.outputs.new_version }}'
+          git push origin develop
