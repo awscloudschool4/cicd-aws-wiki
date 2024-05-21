@@ -28,7 +28,7 @@ export default function Home() {
       </Card>
       <Card className="px-20 py-10 mt-4 mx-10" shadow="sm">
         <div className="flex flex-row justify-between items-center">
-          <Title text="취업/자격증" />
+          <Title text="취업/자격증 공유" />
           <Link href="/job">
             <Button color="primary">
               <FiArrowRight /> <p>이동하기</p>
