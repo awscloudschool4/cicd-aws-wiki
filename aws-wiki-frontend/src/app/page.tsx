@@ -39,7 +39,7 @@ export default function Home() {
       </Card>
       <Card className="px-20 py-10 mt-4 mx-10" shadow="sm">
         <div className="flex flex-row justify-between items-center">
-          <Title text="필기 공유" />
+          <Title text="수업 노트 공유" />
 
           <Link href="/note">
             <Button color="primary">
