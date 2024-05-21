@@ -7,13 +7,13 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-  Image,
   useDisclosure,
 } from "@nextui-org/react";
 
 import NoteModal from "../bigModal/NoteModal";
 import { INote } from "@/utils/DataType";
 import { FormatDate } from "@/utils/FormatDate";
+import ImageComponent from "../ServerImage";
 
 const NoteCardSection = () => {
   const [selectedNote, setSelectedNote] = useState<INote | null>(null);
@@ -47,7 +47,12 @@ const NoteCardSection = () => {
               <p className=" font-bold">{note.title}</p>
             </CardHeader>
             <CardBody>
-              <Image src={note.image} width={500} height={250} alt="사진" />
+              <ImageComponent
+                src={note.image}
+                width={500}
+                height={250}
+                alt="사진"
+              />
             </CardBody>
             <Divider />
             <CardFooter className="flex flex-col gap-2">
