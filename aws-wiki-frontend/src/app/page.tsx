@@ -17,7 +17,7 @@ export default function Home() {
         shadow="sm"
       >
         <div className="flex flex-row justify-between items-center">
-          <Title text="이미지  공유" />
+          <Title text="사진 공유" />
           <Link href="/class">
             <Button color="primary">
               <FiArrowRight /> <p>이동하기</p>
