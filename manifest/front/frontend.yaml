@@ -12,7 +12,7 @@ spec:
     - containerPort: 3000
     env:
     - name: API_URL
-      value: my-django-svc
+      value: http://my-django-svc.default.svc.cluster.local:8000
 ---
 apiVersion: v1
 kind: Service
