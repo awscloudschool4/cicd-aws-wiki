@@ -22,36 +22,36 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Frontend Image
-        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-frontend/') }}
+        if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') }}
         run: |
           docker build -t codingalice/aws-wiki-frontend:2.0 aws-wiki-frontend
           docker push codingalice/aws-wiki-frontend:2.0
 
       - name: Update frontend.yaml
-        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-frontend/') }}
+        if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') }}
         run: |
           sed -i 's|image: codingalice/aws-wiki-frontend:.*|image: codingalice/aws-wiki-frontend:2.0|' manifest/front/frontend.yaml
 
       - name: Build and Push Backend Image
-        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-backend/') }}
+        if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/') }}
         run: |
           docker build -t codingalice/aws-wki-backend:1.0 aws-wiki-backend
           docker push codingalice/aws-wki-backend:1.0
 
       - name: Update backend.yaml
-        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-backend/') }}
+        if: ${{ steps.changed-files.outputs.all_changed_files != '' && contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/') }}
         run: |
           sed -i 's|image: codingalice/aws-wki-backend:.*|image: codingalice/aws-wki-backend:1.0|' manifest/back/backend.yaml
 
       - name: Commit and push changes
         if: |
-          ${{ steps.changed-files.outputs.all_changed_files }} && 
-          ( ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-frontend/') }} || 
-            ${{ fromJson(steps.changed-files.outputs.all_changed_files) | contains('aws-wiki-backend/') }} )
+          steps.changed-files.outputs.all_changed_files != '' &&
+          (contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-frontend/') || 
+           contains(steps.changed-files.outputs.all_changed_files, 'aws-wiki-backend/'))
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
